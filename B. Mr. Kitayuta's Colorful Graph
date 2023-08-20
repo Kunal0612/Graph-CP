@@ -1,0 +1,64 @@
+Mr. Kitayuta has just bought an undirected graph consisting of n vertices and m edges. The vertices of the graph are numbered from 1 to n. Each edge, namely edge i, has a color ci, connecting vertex ai and bi.
+
+Mr. Kitayuta wants you to process the following q queries.
+
+In the i-th query, he gives you two integers — ui and vi.
+
+Find the number of the colors that satisfy the following condition: the edges of that color connect vertex ui and vertex vi directly or indirectly.
+Input
+
+The first line of the input contains space-separated two integers — n and m (2 ≤ n ≤ 100, 1 ≤ m ≤ 100), denoting the number of the vertices and the number of the edges, respectively.
+
+The next m lines contain space-separated three integers — ai, bi (1 ≤ ai < bi ≤ n) and ci (1 ≤ ci ≤ m). Note that there can be multiple edges between two vertices. However, there are no multiple edges of the same color between two vertices, that is, if i ≠ j, (ai, bi, ci) ≠ (aj, bj, cj).
+
+The next line contains a integer — q (1 ≤ q ≤ 100), denoting the number of the queries.
+
+Then follows q lines, containing space-separated two integers — ui and vi (1 ≤ ui, vi ≤ n). It is guaranteed that ui ≠ vi.
+Output
+
+For each query, print the answer in a separate line.
+
+
+
+Code------
+
+For every possible color i have run a dfs and checked if for that color i can reach from u to v or not if we can reach increment the counter or else just check for next color
+
+
+bool dfs(int u,int v,int col,map<ll,vector<pair<ll,ll>>> &mp,vector<ll> vis){
+    vis[u]=1;
+    if(u==v) return true;
+    for(auto &it:mp[u]){
+        auto x=it;
+        if(!vis[x.first] and x.second==col) {
+            if(dfs(x.first,v,col,mp,vis)) return true;
+        }
+    }
+    return false;
+}
+
+void kunal(){
+   ll n,m;
+   cin>>n>>m;
+   map<ll,vector<pair<ll,ll>>> mp;
+   for(ll i=0;i<m;i++){
+    ll a,b,c;
+    cin>>a>>b>>c;
+    a--,b--;
+    mp[a].push_back({b,c});
+    mp[b].push_back({a,c});
+   }
+   ll q;
+   cin>>q;
+   while(q--){
+    ll u,v;
+    cin>>u>>v;
+    u--,v--;
+    vector<ll> vis(n,0);
+    ll ans=0;
+    for(int i=0;i<=100;i++){
+        if(dfs(u,v,i,mp,vis)) ans++;
+    }
+    cout<<ans<<nl;
+   }
+}
