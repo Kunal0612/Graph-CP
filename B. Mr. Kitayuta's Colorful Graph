@@ -62,3 +62,63 @@ void kunal(){
     cout<<ans<<nl;
    }
 }
+
+
+
+---Using Union Find----
+
+#define DEB
+
+
+
+int n,m;
+
+struct uf{
+	static const int MAXN=105;
+	int par[MAXN];
+	int size[MAXN];
+	void init(){
+		memset(par,-1,sizeof(par));
+		REP(i,MAXN) size[i]=1;
+	}
+	int root(int a){
+		if(par[a]==-1) return a;
+		return par[a]=root(par[a]);
+	}
+	void unite(int a,int b){
+		a=root(a);b=root(b);
+		if(a==b) return;
+		if(size[a]<size[b]) swap(a,b);
+
+		par[b]=a;
+		size[a]+=size[b];
+	}
+	bool same(int a,int b){
+		return root(a)==root(b);
+	}
+};
+uf u_[105];
+
+
+int  main(){
+	REP(i,100) u_[i].init();
+	cin>>n>>m;
+	REP(i,m){
+		int a,b,c;cin>>a>>b>>c;--a;--b;--c;
+		u_[c].unite(a,b);
+	}
+	int q;cin>>q;
+	REP(hoge,q){
+		int res=0;
+		int u,v;cin>>u>>v;--u;--v;
+		REP(i,100) if(u_[i].same(u,v)) ++res;
+		cout<<res<<endl;
+	}
+		
+
+	return 0;
+}
+
+
+
+
