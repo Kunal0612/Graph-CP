@@ -1,0 +1,90 @@
+C. Kefa and Park
+time limit per test2 seconds
+memory limit per test256 megabytes
+inputstandard input
+outputstandard output
+Kefa decided to celebrate his first big salary by going to the restaurant.
+
+He lives by an unusual park. The park is a rooted tree consisting of n vertices with the root at vertex 1. Vertex 1 also contains Kefa's house. Unfortunaely for our hero, the park also contains cats. Kefa has already found out what are the vertices with cats in them.
+
+The leaf vertices of the park contain restaurants. Kefa wants to choose a restaurant where he will go, but unfortunately he is very afraid of cats, so there is no way he will go to the restaurant if the path from the restaurant to his house contains more than m consecutive vertices with cats.
+
+Your task is to help Kefa count the number of restaurants where he can go.
+
+Input
+The first line contains two integers, n and m (2 ≤ n ≤ 105, 1 ≤ m ≤ n) — the number of vertices of the tree and the maximum number of consecutive vertices with cats that is still ok for Kefa.
+
+The second line contains n integers a1, a2, ..., an, where each ai either equals to 0 (then vertex i has no cat), or equals to 1 (then vertex i has a cat).
+
+Next n - 1 lines contains the edges of the tree in the format "xi yi" (without the quotes) (1 ≤ xi, yi ≤ n, xi ≠ yi), where xi and yi are the vertices of the tree, connected by an edge.
+
+It is guaranteed that the given set of edges specifies a tree.
+
+Output
+A single integer — the number of distinct leaves of a tree the path to which from Kefa's home contains at most m consecutive vertices with cats.
+
+Examples
+inputCopy
+4 1
+1 1 0 0
+1 2
+1 3
+1 4
+outputCopy
+2
+inputCopy
+7 1
+1 0 1 1 0 0 0
+1 2
+1 3
+2 4
+2 5
+3 6
+3 7
+outputCopy
+2
+
+
+
+Code------
+
+
+ll ans=0;
+void dfs(ll sc,ll p,ll m,map<ll,vector<ll>> &mp,vector<ll> &col,ll cnt,ll maxi){
+    if (col[sc])cnt++;
+    else cnt = 0;
+    maxi = max(maxi,cnt);
+    int numChild = 0;
+    for (int v:mp[sc]){
+        if (v != p){
+            dfs(v,sc,m,mp,col,cnt,maxi);
+            numChild++;
+        }
+    }
+    if (numChild == 0 && maxi <= m)ans++;
+}
+
+void kunal(){
+   ll n,m;
+   cin>>n>>m;
+   vector<ll> a(n);
+   for(ll i=0;i<n;i++){
+    cin>>a[i];
+   }
+   vector<ll> vis(n,0);
+   vector<ll> ind(n,0);
+   map<ll,vector<ll>> mp;
+   for(ll i=0;i<n-1;i++){
+    ll u,v;
+    cin>>u>>v;
+    u--,v--;
+    ind[u]++;
+    ind[v]++;
+    mp[u].push_back(v);
+    mp[v].push_back(u);
+   }
+   ll r=0;
+   if(a[0]==1) r++;
+   dfs(0,-1,m,mp,a,0,0);
+   cout<<ans<<nl;
+}
